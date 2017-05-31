@@ -252,19 +252,6 @@ var LanguageScript = LanguageScript || (function () {
 			sendChat("Languages Script", "/w " + whoSpoke + " You didn't say anything.");
 			return;
 		}
-		
-		var numbersArray = numbers[characters];
-		var symbolsArray = symbols[characters];
-		var consonantArray = consonant[characters];
-		var consonantUpperArray = consonantUpper[characters];
-		var vowelArray = vowel[characters];
-		var givenArray = numbersArray.concat(symbolsArray,consonantArray,consonantUpperArray,vowelArray);
-		var numbersArrayStandard = numbers["Common"];
-		var symbolsArrayStandard = symbols["Common"];
-		var consonantArrayStandard = consonant["Common"];
-		var consonantUpperArrayStandard = consonantUpper["Common"];
-		var vowelArrayStandard = vowel["Common"];
-		var standardArray = numbersArrayStandard.concat(symbolsArrayStandard,consonantArrayStandard,consonantUpperArrayStandard,vowelArrayStandard);
 	
 		gibberish = gibberishFunction(characters,sentence);
 		
@@ -320,9 +307,7 @@ var LanguageScript = LanguageScript || (function () {
 			if (temp === -1) {
 				if (iKnowThisVowel === true) {
 					//If vowel
-					log('Vowels detected!');
 					if (findIndex(sentence[i],vowel["ForChecks"]) != -1) {
-						log(sentence[i]+' is Vowel');
 						if (sentence[i].toLowerCase() !== sentence[i]) {
 							result += vowelUpper[language][customRandom(languageSeed,sentence.charCodeAt(i)) % vowelUpper[language].length];
 						}
@@ -332,7 +317,6 @@ var LanguageScript = LanguageScript || (function () {
 					}
 					//if consonant or unknown
 					else {
-						log(sentence[i]+' is Consonant');
 						if (sentence[i].toLowerCase() !== sentence[i]) {
 							result += consonantUpper[language][customRandom(languageSeed,sentence.charCodeAt(i)) % consonantUpper[language].length];
 						}
