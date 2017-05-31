@@ -19,8 +19,8 @@ Change this if your character sheets dont use this attribute
 var LanguageScript = LanguageScript || (function () {
 	'use strict';
 	
-	var version = "1.2.0",
-	releasedate = "31/05/2017",  
+	var version = "1.2.1",
+	releasedate = "01/06/2017",  
 	languageTag = "prolanguages",
 	whichLanguage = "Common",
 	
@@ -97,28 +97,29 @@ var LanguageScript = LanguageScript || (function () {
 		
 		roll20API.languageData = [];
 		
-		pushLanguage("Unknown",7,whichLanguage);
-		pushLanguage("Abyssal",1,"Infernal");
-		pushLanguage("Aquan",1,"Elven");
-		pushLanguage("Auran",1,"Draconic");
+		pushLanguage("Unknown",6,whichLanguage);
+		pushLanguage("Abyssal",7,"Infernal");
+		pushLanguage("Aquan",3,"Elven");
+		pushLanguage("Auran",3,"Draconic");
 		pushLanguage("Celestial",2,"Draconic");
-		pushLanguage("Slavic",1,"Cyrillic");
-		pushLanguage("Draconic",3,"Draconic");
-		pushLanguage("Druidic",2,"Elven");
-		pushLanguage("Dwarven",1,"Dwarven");
-		pushLanguage("Elven",3,"Elven");
-		pushLanguage("Giant",2,"Dwarven");
+		pushLanguage("Cyrillic",0,"Cyrillic");
+		pushLanguage("Draconic",0,"Draconic");
+		pushLanguage("Druidic",5,"Elven");
+		pushLanguage("Dwarven",0,"Dwarven");
+		pushLanguage("Elven",0,"Elven");
+		pushLanguage("Giant",5,"Dwarven");
 		pushLanguage("Gnome",3,"Dwarven");
-		pushLanguage("Goblin",4,"Dwarven");
-		pushLanguage("Gnoll",1,"Common");
-		pushLanguage("Halfling",2,"Common");
-		pushLanguage("Ignan",4,"Draconic");
-		pushLanguage("Infernal",2,"Infernal");
-		pushLanguage("Orc",5,"Dwarven");
-		pushLanguage("Sylvan",4,"Elven");
-		pushLanguage("Terran",6,"Dwarven");
-		pushLanguage("Undercommon",5,"Elven");
-		pushLanguage("Thieves'Cant",3,"Common");
+		pushLanguage("Goblin",11,"Dwarven");
+		pushLanguage("Gnoll",11,"Common");
+		pushLanguage("Halfling",3,"Common");
+		pushLanguage("Ignan",11,"Draconic");
+		pushLanguage("Infernal",0,"Infernal");
+		pushLanguage("Orc",9,"Dwarven");
+		pushLanguage("Slavic",3,"Cyrillic");
+		pushLanguage("Sylvan",7,"Elven");
+		pushLanguage("Terran",15,"Dwarven");
+		pushLanguage("Undercommon",11,"Elven");
+		pushLanguage("Thieves'Cant",1,"Common");
 	},
 	
 	//Handles chat message (on('chat:message') event)
@@ -323,30 +324,30 @@ var LanguageScript = LanguageScript || (function () {
 					if (findIndex(sentence[i],vowel["ForChecks"]) != -1) {
 						log(sentence[i]+' is Vowel');
 						if (sentence[i].toLowerCase() !== sentence[i]) {
-							result += vowelUpper[language][sentence.charCodeAt(i) % vowelUpper[language].length];
+							result += vowelUpper[language][customRandom(languageSeed,sentence.charCodeAt(i)) % vowelUpper[language].length];
 						}
 						else {
-							result += vowel[language][sentence.charCodeAt(i) % vowel[language].length];
+							result += vowel[language][customRandom(languageSeed,sentence.charCodeAt(i)) % vowel[language].length];
 						}
 					}
 					//if consonant or unknown
 					else {
 						log(sentence[i]+' is Consonant');
 						if (sentence[i].toLowerCase() !== sentence[i]) {
-							result += consonantUpper[language][sentence.charCodeAt(i) % consonantUpper[language].length];
+							result += consonantUpper[language][customRandom(languageSeed,sentence.charCodeAt(i)) % consonantUpper[language].length];
 						}
 						else {
-							result += consonant[language][sentence.charCodeAt(i) % consonant[language].length];
+							result += consonant[language][customRandom(languageSeed,sentence.charCodeAt(i)) % consonant[language].length];
 						}
 					}
 				}
 				//if we met no vowels at all
 				else {
 					if (sentence[i].toLowerCase() !== sentence[i]) {
-						result += allLettersUpper[sentence.charCodeAt(i) % allLettersUpper.length];
+						result += allLettersUpper[customRandom(languageSeed,sentence.charCodeAt(i)) % allLettersUpper.length];
 					}
 					else {
-						result += allLetters[sentence.charCodeAt(i) % allLetters.length];
+						result += allLetters[customRandom(languageSeed,sentence.charCodeAt(i)) % allLetters.length];
 					}
 				}
 			}
@@ -366,20 +367,12 @@ var LanguageScript = LanguageScript || (function () {
 		return(-1);
 	},
 	
-	customRandom = function(nseed) {	
-		var seed, constant = Math.pow(2, 13)+1, prime = 1987, maximum = 1000;	
-		if (nseed) {
-			seed = nseed;	
+	customRandom = function(seed,charID) {
+		if (seed === 0) {
+			return(charID);
 		}
-		if (seed === null) {
-			seed = (new Date()).getTime();   
-		}return{	
-			next : function(min, max) {	
-				seed *= constant;	
-				seed += prime;	
-				return min && max ? min+seed%maximum/maximum*(max-min) : seed%maximum/maximum;  
-			}
-		};
+		var x = Math.sin(seed+charID) * 10000;
+		return Math.floor((x - Math.floor(x))*1000);
 	},
 	
 	//sets LanguageTag
