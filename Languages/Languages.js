@@ -19,16 +19,17 @@ Change this if your character sheets dont use this attribute
 var LanguageScript = LanguageScript || (function () {
 	'use strict';
 	
-	var version = "1.1.3",
+	var version = "1.2.0",
 	releasedate = "31/05/2017",  
 	languageTag = "prolanguages",
 	whichLanguage = "Common",
 	
 	numbers = [],
 	symbols = [],
-	lower = [],
+	consonant = [],
+	consonantUpper = [],
 	vowel = [],
-	upper = [],
+	vowelUpper = [],
 	
 	roll20API = roll20API || {},
 	
@@ -55,33 +56,44 @@ var LanguageScript = LanguageScript || (function () {
 		numbers["Infernal"] = ["·",":","∴","+","∏","∏·","∏:","∏∴","∏+","°"];
 		numbers["Cyrillic"] = ["Ⰰ","Ⰱ","Ⰲ","Ⰳ","Ⰴ","Ⰵ","Ⰶ","Ⰷ","Ⰸ","Ⰹ"];
 		
-		symbols["Common"] = ["!","@","#","$","%","¦","&","*","(",")","`","-","=","~","_","+","[","]","{","}","|",";","'",":",",",".","/","<",">","?"];
-		symbols["Dwarven"] = ["∫","»","‡","∇","‰","¦","χ","¬","|","]","`","-","Ξ","⊥","_","=","|","|","|","|","|","|","^","|","-","•","||","[","]","Ž"]; 
-		symbols["Elven"] = ["~","•","⊕","§","‰","¦","∞","Φ","}","|","`","-","Ξ","≈","_","†","]","[",")","(","|","|","'","∫","≈","·","∠", "∈","∋","¿"];
-		symbols["Draconic"] = ["~","•","⊕","§","‰","¦","∞","Φ","}","|","`","-","Ξ","≈","_","†","]","[",")","(","|","|","'","∫","≈","·","∠", "∈","∋","¿"];
-		symbols["Infernal"] = ["∧","•","‡","§","‰","¦","χ","Φ","|","]","`","-","Ξ","≈","_","∧","|","|",")","(","|","|","'","∫","≈","•","||","∈","∋","¿"];
-		symbols["Cyrillic"] = ["~","·","⊕","Ҙ","‰","։","∞","Φ","}","|","`","-","Ξ","≈","_","†","]","[",")","(","|","|","'","∫","≈","·","∠", "∈","∋",";"];
+		symbols["Common"] = [" ","!","@","#","$","%","¦","&","*","(",")","`","-","=","~","_","+","[","]","{","}","|",";","'",":",",",".","/","<",">","?"];
+		symbols["Dwarven"] = ["|","∫","»","‡","∇","‰","¦","χ","¬","|","]","`","-","Ξ","⊥","_","=","|","|","|","|","|","|","^","|","-","•","||","[","]","Ž"]; 
+		symbols["Elven"] = [" '","~","•","⊕","§","‰","¦","∞","Φ","}","|","`","-","Ξ","≈","_","†","]","[",")","(","|","|","'","∫","≈","·","∠", "∈","∋","¿"];
+		symbols["Draconic"] = [" ","~","•","⊕","§","‰","¦","∞","Φ","}","|","`","-","Ξ","≈","_","†","]","[",")","(","|","|","'","∫","≈","·","∠", "∈","∋","¿"];
+		symbols["Infernal"] = ["' ","∧","•","‡","§","‰","¦","χ","Φ","|","]","`","-","Ξ","≈","_","∧","|","|",")","(","|","|","'","∫","≈","•","||","∈","∋","¿"];
+		symbols["Cyrillic"] = [" ","!","•","⊕","Ҙ","‰","։","∞","Φ","}","|","`","-","Ξ","≈","_","†","]","[",")","(","|","|","'","∫","≈","·","∠", "∈","∋",";"];
 		
-		lower["Common"] = ["b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z"," "];
-		lower["Dwarven"] = ["⌈","⌉","⌊","⌋","¬","¦","Γ","Λ","Ξ","Π","‡","∫","[","]","|","||","ΠΠ","VV","M","|","|"]; 
-		lower["Elven"] = ["λ","Ψ","ϒ","ϖ","φ","ç","þ","Þ","q","r","ξ","∫","~","∈","∋","ω","∪","⊆","⊇","∂"," '"];
-		lower["Draconic"] = ["v","c","x","ϒ","þ","s","∫","ð","l","ʔ","n","≠","q","r","h","‡","b","w","t","d"," "];
-		lower["Infernal"] = ["ζ","Ψ","∈","ϖ","∏","ç","þ","∫","q","⊆","ς","Þ","ς","ϒ","∋","ω","∪","ξ","⊇","μ","' "];
-		lower["Cyrillic"] = ["б","в","г","д","ж","ѕ","з","к","л","м","н","п","р","с","т","ф","х","ѡ","ц","ч","ш","щ","ы","ѯ","ѱ","ѵ","ҁ","ҵ"," "];
+		consonant["ForChecks"] = ["b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z","б","в","г","д","ж","з","й","к","л","м","н","п","р","с","т","ф","х","ц","ч","ш","щ","ъ","ь"];
+		
+		consonant["Common"] = ["b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z"];
+		consonant["Dwarven"] = ["⌈","⌉","⌊","⌋","¬","¦","Γ","Λ","Ξ","Π","‡","∫","[","]","|","||","ΠΠ","VV","M","|"]; 
+		consonant["Elven"] = ["λ","Ψ","ϒ","ϖ","φ","ç","þ","Þ","q","r","ξ","∫","~","∈","∋","ω","∪","⊆","⊇","∂"];
+		consonant["Draconic"] = ["v","c","x","ϒ","þ","s","∫","ð","l","ʔ","n","≠","q","r","h","‡","b","w","t","d"];
+		consonant["Infernal"] = ["ζ","Ψ","∈","ϖ","∏","ç","þ","∫","q","⊆","ς","Þ","ς","ϒ","∋","ω","∪","ξ","⊇","μ"];
+		consonant["Cyrillic"] = ["б","в","г","д","ж","ѕ","з","к","л","м","н","п","р","с","т","ф","х","ѡ","ц","ч","ш","щ","ы","ѯ","ѱ","ѵ","ҁ","ҵ"];
 	   
-		upper["Common"] = ["B","C","D","F","G","H","J","K","L","M","N","P","Q","R","S","T","V","W","X","Z"];
-		upper["Dwarven"] = ["⌈","⌉","⌊","⌋","¬","¦","Γ","Λ","Ξ","Π","‡","∫","[","]","|","||","ΠΠ","VV","M","|"]; 
-		upper["Elven"] = ["λ","Ψ","ϒ","ϖ","φ","ç","þ","Þ","θ","η","ξ","∫","~","∈","∋","ω","∪","⊆","⊇","∂"];
-		upper["Draconic"] = ["B","C","D","ϒ","þ","H","∫","K","L","M","N","P","θ","Γ","∂","‡","V","W","‡","χ"];
-		upper["Infernal"] = ["ζ","Ψ","ϒ","ϖ","∏","ç","þ","Þ","θ","ξ","ς","∫","ς","E","∃","ω","∪","⊆","⊇","μ"];
-		upper["Cyrillic"] = ["Б","В","Г","Д","Ж","S","З","К","Л","М","Н","П","Р","С","Т","Ф","Х","Ѡ","Ц","Ч","Ш","Щ","Ы","Ѯ","Ѱ","Ѵ","Ҁ","Ҵ"," "];
+		consonantUpper["Common"] = ["B","C","D","F","G","H","J","K","L","M","N","P","Q","R","S","T","V","W","X","Z"];
+		consonantUpper["Dwarven"] = ["⌈","⌉","⌊","⌋","¬","¦","Γ","Λ","Ξ","Π","‡","∫","[","]","|","||","ΠΠ","VV","M","|"]; 
+		consonantUpper["Elven"] = ["λ","Ψ","ϒ","ϖ","φ","ç","þ","Þ","θ","η","ξ","∫","~","∈","∋","ω","∪","⊆","⊇","∂"];
+		consonantUpper["Draconic"] = ["B","C","D","ϒ","þ","H","∫","K","L","M","N","P","θ","Γ","∂","‡","V","W","‡","χ"];
+		consonantUpper["Infernal"] = ["ζ","Ψ","ϒ","ϖ","∏","ç","þ","Þ","θ","ξ","ς","∫","ς","E","∃","ω","∪","⊆","⊇","μ"];
+		consonantUpper["Cyrillic"] = ["Б","В","Г","Д","Ж","S","З","К","Л","М","Н","П","Р","С","Т","Ф","Х","Ѡ","Ц","Ч","Ш","Щ","Ы","Ѯ","Ѱ","Ѵ","Ҁ","Ҵ"];
 		
-		vowel["Common"] = ["a","e","i","o","u","y","A","E","I","O","U","Y"];
-		vowel["Dwarven"]  = ["⌈","⌉","⌊","⌋","¬","¦","Γ","Λ","Ξ","Ξ","Π","‡"];
-		vowel["Elven"] = ["í","ä","ö","ý","ú","ë","Í","Ä","Ö","Ÿ","Ú","Ë"];
-		vowel["Draconic"] = ["à","è","ì","õ","ù","ý","À","È","Ì","Ò","Ù","Ý"];
-		vowel["Infernal"] = ["ô","‡","∧","û","¦","î","Ô","χ","Φ","Û","Î","Ξ"];
-		vowel["Cyrillic"] = ["а","е","и","i","о","оу","у","ѣ","ѥ","ю","ѫ","ѭ","ѧ","ѩ","ѳ","А","Е","И","I","О","ОУ","У","Ѣ","Ѥ","Ю","Ѫ","Ѭ","Ѧ","Ѩ","Ѳ"];
+		vowel["ForChecks"] = ["a","e","i","o","u","y","а","е","ё","и","о","у","ы","ю","я"];
+		
+		vowel["Common"] = ["a","e","i","o","u","y"];
+		vowel["Dwarven"]  = ["⌈","⌉","⌊","⌋","¬","¦"];
+		vowel["Elven"] = ["í","ä","ö","ý","ú","ë"];
+		vowel["Draconic"] = ["à","è","ì","õ","ù","ý"];
+		vowel["Infernal"] = ["ô","‡","∧","û","¦","î"];
+		vowel["Cyrillic"] = ["а","е","и","i","о","оу","у","ѣ","ѥ","ю","ѫ","ѭ","ѧ","ѩ","ѳ"];
+		
+		vowelUpper["Common"] = ["A","E","I","O","U","Y"];
+		vowelUpper["Dwarven"]  = ["Γ","Λ","Ξ","Ξ","Π","‡"];
+		vowelUpper["Elven"] = ["Í","Ä","Ö","Ÿ","Ú","Ë"];
+		vowelUpper["Draconic"] = ["À","È","Ì","Ò","Ù","Ý"];
+		vowelUpper["Infernal"] = ["Ô","χ","Φ","Û","Î","Ξ"];
+		vowelUpper["Cyrillic"] = ["А","Е","И","I","О","ОУ","У","Ѣ","Ѥ","Ю","Ѫ","Ѭ","Ѧ","Ѩ","Ѳ"];
 		
 		roll20API.languageData = [];
 		
@@ -90,7 +102,7 @@ var LanguageScript = LanguageScript || (function () {
 		pushLanguage("Aquan",1,"Elven");
 		pushLanguage("Auran",1,"Draconic");
 		pushLanguage("Celestial",2,"Draconic");
-		pushLanguage("Cyrillic",1,"Cyrillic");
+		pushLanguage("Slavic",1,"Cyrillic");
 		pushLanguage("Draconic",3,"Draconic");
 		pushLanguage("Druidic",2,"Elven");
 		pushLanguage("Dwarven",1,"Dwarven");
@@ -107,7 +119,7 @@ var LanguageScript = LanguageScript || (function () {
 		pushLanguage("Terran",6,"Dwarven");
 		pushLanguage("Undercommon",5,"Elven");
 		pushLanguage("Thieves'Cant",3,"Common");
-	},  
+	},
 	
 	//Handles chat message (on('chat:message') event)
 	handleChat = function(msg) {	
@@ -242,22 +254,18 @@ var LanguageScript = LanguageScript || (function () {
 		
 		var numbersArray = numbers[characters];
 		var symbolsArray = symbols[characters];
-		var lowerArray = lower[characters];
-		var upperArray = upper[characters];
+		var consonantArray = consonant[characters];
+		var consonantUpperArray = consonantUpper[characters];
 		var vowelArray = vowel[characters];
-		var givenArray = numbersArray.concat(symbolsArray,lowerArray,upperArray,vowelArray);
+		var givenArray = numbersArray.concat(symbolsArray,consonantArray,consonantUpperArray,vowelArray);
 		var numbersArrayStandard = numbers["Common"];
 		var symbolsArrayStandard = symbols["Common"];
-		var lowerArrayStandard = lower["Common"];
-		var upperArrayStandard = upper["Common"];
+		var consonantArrayStandard = consonant["Common"];
+		var consonantUpperArrayStandard = consonantUpper["Common"];
 		var vowelArrayStandard = vowel["Common"];
-		var standardArray = numbersArrayStandard.concat(symbolsArrayStandard,lowerArrayStandard,upperArrayStandard,vowelArrayStandard);
+		var standardArray = numbersArrayStandard.concat(symbolsArrayStandard,consonantArrayStandard,consonantUpperArrayStandard,vowelArrayStandard);
 	
-		gibberish = sentence;
-		for (var i=0;i<sentence.length;i++){
-			var characterGiven = sentence.substr(i,1);
-			gibberishFunction(standardArray,givenArray,characterGiven);
-		}
+		gibberish = gibberishFunction(characters,sentence);
 		
 		var theSpeaker = _.findWhere(roll20API.fluencyArray, {isSpeaking: 1});
 		if(theSpeaker.speaks == -1){
@@ -290,21 +298,72 @@ var LanguageScript = LanguageScript || (function () {
 		});  
 	},
 	
-	gibberishFunction = function(standardChar,changeChar,givenChar) {
-		for (var j=0; j<standardChar.length; j++) {
-			var rng = customRandom(givenChar.charCodeAt(0) + languageSeed);
-			rndSeed = rng.next(1,changeChar.length);
-			var seedRndInt = Math.round(rndSeed);
-			if(standardChar[j] == givenChar) {
-		  var replaceCharacter;
-				if(changeChar[seedRndInt] === undefined){
-					replaceCharacter = " ";
-				}else{
-					replaceCharacter = changeChar[seedRndInt];
-				}
-				gibberish = gibberish.replace(givenChar,replaceCharacter);
+	gibberishFunction = function(language,sentence) {
+		//Polyfill - implementation of arr.findIndex method
+		var directChangeFromArray = numbers["Common"].concat(symbols["Common"]);
+		var directChangeToArray = numbers[language].concat(symbols[language]);
+		var allLetters = consonant[language].concat([language]);
+		var allLettersUpper = consonantUpper[language].concat(vowelUpper[language]);
+		var result = '';
+		var temp = 0;
+		var i = 0;
+		var iKnowThisVowel = false;
+		for (i=0;i<vowel["ForChecks"].length;i++){
+			if (sentence.indexOf(vowel["ForChecks"][i]) != -1) {
+				iKnowThisVowel = true;
+				break;
 			}
 		}
+		for (i=0;i<sentence.length;i++){
+			temp = findIndex(sentence[i],directChangeFromArray);
+			if (temp === -1) {
+				if (iKnowThisVowel === true) {
+					//If vowel
+					log('Vowels detected!');
+					if (findIndex(sentence[i],vowel["ForChecks"]) != -1) {
+						log(sentence[i]+' is Vowel');
+						if (sentence[i].toLowerCase() !== sentence[i]) {
+							result += vowelUpper[language][sentence.charCodeAt(i) % vowelUpper[language].length];
+						}
+						else {
+							result += vowel[language][sentence.charCodeAt(i) % vowel[language].length];
+						}
+					}
+					//if consonant or unknown
+					else {
+						log(sentence[i]+' is Consonant');
+						if (sentence[i].toLowerCase() !== sentence[i]) {
+							result += consonantUpper[language][sentence.charCodeAt(i) % consonantUpper[language].length];
+						}
+						else {
+							result += consonant[language][sentence.charCodeAt(i) % consonant[language].length];
+						}
+					}
+				}
+				//if we met no vowels at all
+				else {
+					if (sentence[i].toLowerCase() !== sentence[i]) {
+						result += allLettersUpper[sentence.charCodeAt(i) % allLettersUpper.length];
+					}
+					else {
+						result += allLetters[sentence.charCodeAt(i) % allLetters.length];
+					}
+				}
+			}
+			else {
+				result += directChangeToArray[temp];
+			}
+		}
+		return(result);
+	},
+	
+	findIndex = function(character,array) {
+		for(var i=0;i<array.length;i++){
+			if (array[i] == character) {
+				return(i);
+			}
+		}
+		return(-1);
 	},
 	
 	customRandom = function(nseed) {	
