@@ -19,8 +19,8 @@ Change this if your character sheets dont use this attribute
 var LanguageScript = LanguageScript || (function () {
     'use strict';
     
-    var version = "1.1.1",
-    releasedate = "12/17/2015",  
+    var version = "1.1.3",
+    releasedate = "31/05/2017",  
     languageTag = "prolanguages",
     whichLanguage = "Common",
     playerIDGM = "-JwAP_Onk734JaP9UAOP",
@@ -44,40 +44,40 @@ var LanguageScript = LanguageScript || (function () {
     separators = /[()\-\s,]+/,
     
     checkInstall = function() {
-        log("version: "+version+" ("+releasedate+") installed");
+        log("Languages version: "+version+" ("+releasedate+") installed");
         log("https://github.com/Roll20/roll20-api-scripts/tree/master/Languages");
     },
     
     initialize = function() {
         numbers["Common"] = ["1","2","3","4","5","6","7","8","9","0"];
-        numbers["Dwarven"] = ["·",":","?","+","?","?·","?:","??","?+","°"];
-        numbers["Elven"] = ["·",":","?","+","¤","¤·","¤:","¤?","¤+","°"];
-        numbers["Draconic"] = ["·",":","?","+","×","×·","×:","×?","×+","°"];
-        numbers["Infernal"] = ["·",":","?","+","?","?·","?:","??","?+","°"];
+        numbers["Dwarven"] = ["·",":","∴","+","◊","◊·","◊:","◊∴","◊+","°"];
+        numbers["Elven"] = ["·",":","∴","+","¤","¤·","¤:","¤∴","¤+","°"];
+        numbers["Draconic"] = ["·",":","∴","+","×","×·","×:","×∴","×+","°"];
+        numbers["Infernal"] = ["·",":","∴","+","∏","∏·","∏:","∏∴","∏+","°"];
         
         symbols["Common"] = ["!","@","#","$","%","¦","&","*","(",")","`","-","=","~","_","+","[","]","{","}","|",";","'",":",",",".","/","<",">","?"];
-        symbols["Dwarven"] = ["?","»","‡","?","‰","¦","?","¬","|","]","`","-","?","?","_","=","|","|","|","|","|","|","^","|","-","•","||","[","]","Ž"]; 
-        symbols["Elven"] = ["~","•","?","§","‰","¦","8","F","}","|","`","-","?","˜","_","†","]","[",")","(","|","|","'","?","˜","·","?", "?","?","¿"];
-        symbols["Draconic"] = ["~","•","?","§","‰","¦","8","F","}","|","`","-","?","˜","_","†","]","[",")","(","|","|","'","?","˜","·","?", "?","?","¿"];
-        symbols["Infernal"] = ["?","•","‡","§","‰","¦","?","F","|","]","`","-","?","˜","_","?","|","|",")","(","|","|","'","?","˜","•","||","?","?","¿"];
+        symbols["Dwarven"] = ["∫","»","‡","∇","‰","¦","χ","¬","|","]","`","-","Ξ","⊥","_","=","|","|","|","|","|","|","^","|","-","•","||","[","]","Ž"]; 
+        symbols["Elven"] = ["~","•","⊕","§","‰","¦","∞","Φ","}","|","`","-","Ξ","≈","_","†","]","[",")","(","|","|","'","∫","≈","·","∠", "∈","∋","¿"];
+        symbols["Draconic"] = ["~","•","⊕","§","‰","¦","∞","Φ","}","|","`","-","Ξ","≈","_","†","]","[",")","(","|","|","'","∫","≈","·","∠", "∈","∋","¿"];
+        symbols["Infernal"] = ["∧","•","‡","§","‰","¦","χ","Φ","|","]","`","-","Ξ","≈","_","∧","|","|",")","(","|","|","'","∫","≈","•","||","∈","∋","¿"];
         
         lower["Common"] = ["b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","z"," "];
-        lower["Dwarven"] = ["?","?","?","?","¬","¦","G","?","?","?","‡","?","[","]","|","||","??","VV","M","|","|"]; 
-        lower["Elven"] = ["?","?","?","?","f","ç","þ","Þ","q","r","?","?","~","?","?","?","?","?","?","?"," '"];
-        lower["Draconic"] = ["v","c","x","?","þ","s","?","ð","l","?","n","?","q","r","h","‡","b","w","t","d"," "];
-        lower["Infernal"] = ["?","?","?","?","?","ç","þ","?","q","?","?","Þ","?","?","?","?","?","?","?","µ","' "];
+        lower["Dwarven"] = ["⌈","⌉","⌊","⌋","¬","¦","Γ","Λ","Ξ","Π","‡","∫","[","]","|","||","ΠΠ","VV","M","|","|"]; 
+        lower["Elven"] = ["λ","Ψ","ϒ","ϖ","φ","ç","þ","Þ","q","r","ξ","∫","~","∈","∋","ω","∪","⊆","⊇","∂"," '"];
+        lower["Draconic"] = ["v","c","x","ϒ","þ","s","∫","ð","l","ʔ","n","≠","q","r","h","‡","b","w","t","d"," "];
+        lower["Infernal"] = ["ζ","Ψ","∈","ϖ","∏","ç","þ","∫","q","⊆","ς","Þ","ς","ϒ","∋","ω","∪","ξ","⊇","μ","' "];
        
         upper["Common"] = ["B","C","D","F","G","H","J","K","L","M","N","P","Q","R","S","T","V","W","X","Z"];
-        upper["Dwarven"] = ["?","?","?","?","¬","¦","G","?","?","?","‡","?","[","]","|","||","??","VV","M","|"]; 
-        upper["Elven"] = ["?","?","?","?","f","ç","þ","Þ","?","?","?","?","~","?","?","?","?","?","?","?"];
-        upper["Draconic"] = ["B","C","D","?","þ","H","?","K","L","M","N","P","?","G","?","‡","V","W","‡","?"];
-        upper["Infernal"] = ["?","?","?","?","?","ç","þ","Þ","?","?","?","?","?","E","?","?","?","?","?","µ"];
+        upper["Dwarven"] = ["⌈","⌉","⌊","⌋","¬","¦","Γ","Λ","Ξ","Π","‡","∫","[","]","|","||","ΠΠ","VV","M","|"]; 
+        upper["Elven"] = ["λ","Ψ","ϒ","ϖ","φ","ç","þ","Þ","θ","η","ξ","∫","~","∈","∋","ω","∪","⊆","⊇","∂"];
+        upper["Draconic"] = ["B","C","D","ϒ","þ","H","∫","K","L","M","N","P","θ","Γ","∂","‡","V","W","‡","χ"];
+        upper["Infernal"] = ["ζ","Ψ","ϒ","ϖ","∏","ç","þ","Þ","θ","ξ","ς","∫","ς","E","∃","ω","∪","⊆","⊇","μ"];
         
         vowel["Common"] = ["a","e","i","o","u","y","A","E","I","O","U","Y"];
-        vowel["Dwarven"]  = ["?","?","?","?","¬","¦","G","?","?","?","?","‡"];
+        vowel["Dwarven"]  = ["⌈","⌉","⌊","⌋","¬","¦","Γ","Λ","Ξ","Ξ","Π","‡"];
         vowel["Elven"] = ["í","ä","ö","ý","ú","ë","Í","Ä","Ö","Ÿ","Ú","Ë"];
         vowel["Draconic"] = ["à","è","ì","õ","ù","ý","À","È","Ì","Ò","Ù","Ý"];
-        vowel["Infernal"] = ["ô","‡","?","û","¦","î","Ô","?","F","Û","Î","?"];
+        vowel["Infernal"] = ["ô","‡","∧","û","¦","î","Ô","χ","Φ","Û","Î","Ξ"];
         
         roll20API.languageData = [];
         
@@ -95,7 +95,7 @@ var LanguageScript = LanguageScript || (function () {
         pushLanguage("Goblin",4,"Dwarven");
         pushLanguage("Gnoll",1,"Common");
         pushLanguage("Halfling",2,"Common");
-        pushLanguage("Ingan",4,"Draconic");
+        pushLanguage("Ignan",4,"Draconic");
         pushLanguage("Infernal",2,"Infernal");
         pushLanguage("Orc",5,"Dwarven");
         pushLanguage("Sylvan",4,"Elven");
@@ -104,20 +104,26 @@ var LanguageScript = LanguageScript || (function () {
         pushLanguage("Thieves'Cant",3,"Common");
     },  
     
+	//Handles chat message (on('chat:message') event)
     handleChat = function(msg) {    
-    	if (msg.type != "api"){
+    	//Do nothing if chat msg is not API type
+		if (msg.type != "api"){
     	    return;
     	}
         
+		//setlanguagetag handler
         if(msg.content.toLowerCase().indexOf("setlanguagetag ")==1){
+			//check if player is GM
             if(playerIsGM(msg.playerid)){
                 setLanguageTag(msg);
+				sendChat("Languages Script", "LanguageTag is set to "+msg.content.toLowerCase());
             }else{
-                sendChat("Languages Script", "access denied, " + msg.who + " could set language tag")
+                sendChat("Languages Script", "Access denied, " + msg.who + " could set language tag")
             }
             return;
         }
         
+		//createlanguage handler
         if(msg.content.toLowerCase().indexOf("createlanguage ")==1){
             if(playerIsGM(msg.playerid)){
                 if(msg.content.split(" ").length == 4 && !isNaN(msg.content.split(" ")[2])){
@@ -131,6 +137,7 @@ var LanguageScript = LanguageScript || (function () {
             return;
         }
         
+		//deletelanguage handler
         if(msg.content.toLowerCase().indexOf("deletelanguage ")==1){
             if(playerIsGM(msg.playerid)){
                 deleteLanguage(msg.content.split(" ")[1]);
@@ -140,30 +147,41 @@ var LanguageScript = LanguageScript || (function () {
             return;
         }
     	
+		//If message is one of registered languages...
     	if(isSpeakingLanguage(msg)){
+			//Check if speaker can speak this language
             checkForFluency(msg);
+			//Switch whichLanguage back to default
             whichLanguage = 'Common';
             return;
     	}
     },
     
+	//Checks if character who player speaks as can speak language
     checkForFluency = function(msg) {
+		//All players
     	var allPlayers = findObjs({_type: "player"}, {caseInsensitive: true});
+		//Check if it is character of GM speaks. If no, throw error
     	if(findObjs({ _type: "character", name: msg.who }).length !== 0 || playerIsGM(msg.playerid)){
     		spokenByIds = "";
+			//For each player...
     		_.each(allPlayers, function(p) {
+				//if player is online...
     			if(p.get("_online")){
                     var speakingas = p.get("speakingas");
+					//If player speaks as character...
         			if(speakingas != undefined){
         				var languages = getAttrByName(speakingas.split("|")[1], languageTag);
+						//If character knows any languages...
         				if(languages != undefined){
         					languages.split(separators).forEach(function(lang) {
         						if(lang.toUpperCase() == whichLanguage.toUpperCase()){
+									//Add character to list of chars who can understand language.
         							spokenByIds += "," + p.get("id");
         						}
         					});
     					}else if(findObjs({ _type: "character", _id: speakingas }).length !== 0){
-                            sendChat("Languages Script", "This script is set up properly for your character sheets. Use this command to fix: !setlanguagetag [character sheet language attribute name]");
+                            sendChat("Languages Script", "This script is not set up properly for your character sheets. Use this command to fix: !setlanguagetag [character sheet language attribute name]");
         				    log("This script is not set up for your character sheets. Use this command to fix: !setlanguagetag [character sheet language attribute name]");   
     		                return;
     					}else if(playerIsGM(p.get("id"))){
@@ -250,6 +268,8 @@ var LanguageScript = LanguageScript || (function () {
         
     	sendChat(msg.who, "/w " + whoSpoke + " '" + sentence +" ' in " + whichLanguage + ".");
     	sendChat("Languages Script", "/w gm " + msg.who + " said '" + sentence + " ' in " + whichLanguage);
+		//Debugging (logging)
+		//sendChat("Languages Script", "/w gm " + msg.who + " gibberish version: '" + gibberish + " ' is in " + whichLanguage);
     	
     	_.each(roll20API.fluencyArray, function(indexPlayers) {
             if(indexPlayers.displayNameFull != whoSpoke && indexPlayers.displayNameShort != whoSpoke){
@@ -299,6 +319,7 @@ var LanguageScript = LanguageScript || (function () {
     	}
     },
     
+	//sets LanguageTag
     setLanguageTag = function(msg){
     	if(msg.content.indexOf(" ")>0 && msg.content.indexOf(" ")<msg.content.length){
             var tempLanguageTag = msg.content.substring(msg.content.indexOf(" ")+1, msg.content.length);
