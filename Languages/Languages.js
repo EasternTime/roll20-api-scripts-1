@@ -20,7 +20,7 @@ var LanguageScript = LanguageScript || (function () {
 	'use strict';
 	
 	var version = "1.4.1",
-	releasedate = "01/06/2017",  
+	releasedate = "13/07/2017",  
 	languageTag = "languages",
 	whichLanguage = "Common",
 	
@@ -328,11 +328,11 @@ var LanguageScript = LanguageScript || (function () {
 			}
 		});
 		var isSpeakerFluent = true;
-		if (spokenByIds.indexOf(msg.playerid) === -1 || !playerIsGM(msg.playerid)) {
+		if (spokenByIds.indexOf(msg.playerid) === -1 && !playerIsGM(msg.playerid)) {
 			isSpeakerFluent = false;
 			sendChat(msg.who, "/w " + msg.who + " You pretend to speak " + whichLanguage + ".");
 		}
-		sendChat(msg.who, "' " + gibberish +" '");
+		sendChat(msg.who, gibberish);
 		if (isSpeakerFluent) {
 			sendChat("Languages Script", "/w gm " + msg.who + " said ' " + sentence + " ' in " + whichLanguage);
 			_.each(allPlayers,function(p) {
