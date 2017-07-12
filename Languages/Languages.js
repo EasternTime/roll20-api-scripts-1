@@ -19,8 +19,8 @@ Change this if your character sheets dont use this attribute
 var LanguageScript = LanguageScript || (function () {
 	'use strict';
 	
-	var version = "1.4.2",
-	releasedate = "13/07/2017",  
+	var version = "1.4.3",
+	releasedate = "13/07/2017",
 	languageTag = "languages",
 	whichLanguage = "Common",
 	
@@ -310,19 +310,21 @@ var LanguageScript = LanguageScript || (function () {
 				speakingas = p.get("speakingas");
 				//If player speaks as character...
 				if(speakingas !== undefined){
-					var languages = getAttrByName(speakingas.split("|")[1], languageTag);
-					//If character knows any languages...
-					if(languages !== undefined){
-						languages.split(separators).some(function(lang) {
-							if(lang.toUpperCase() == whichLanguage.toUpperCase()){
-								//Add character to list of chars who can understand language.
-								spokenByIds.push(p.get("id"));
-								return true;
-							}
-							else {
-								return false;
-							}
-						});
+					if(speakingas !== "") {
+						var languages = getAttrByName(speakingas.split("|")[1], languageTag);
+						//If character knows any languages...
+						if(languages !== undefined){
+							languages.split(separators).some(function(lang) {
+								if(lang.toUpperCase() == whichLanguage.toUpperCase()){
+									//Add character to list of chars who can understand language.
+									spokenByIds.push(p.get("id"));
+									return true;
+								}
+								else {
+									return false;
+								}
+							});
+						}
 					}
 				}
 			}
