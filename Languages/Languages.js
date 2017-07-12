@@ -13,13 +13,15 @@ The default character sheet language attribute that this script uses is "prolang
 Change this if your character sheets dont use this attribute
 	TO DO:
 	!setLanugageTag newlanguagetag
+	language list
+	actual saving
 
 */
 
 var LanguageScript = LanguageScript || (function () {
 	'use strict';
 	
-	var version = "1.4.3",
+	var version = "1.4.4",
 	releasedate = "13/07/2017",
 	languageTag = "languages",
 	whichLanguage = "Common",
@@ -454,7 +456,7 @@ var LanguageScript = LanguageScript || (function () {
 				log("The previous error was handled properly and there is nothing to worry about");
 				languageMessage = "'" + tempLanguageTag + "' is not the name of an attribute in your character sheet";
 				sendChat("Languages Script", "/w gm " + languageMessage);
-				return;   
+				return;
 			}
 		}else{
 			//language error
@@ -502,8 +504,8 @@ var LanguageScript = LanguageScript || (function () {
 	
 	pushLanguage = function(description, seed, parentlanguage){
 		roll20API.languageData.push({
-			Description: description,   
-			languageSeed: seed, 
+			Description: description,
+			languageSeed: seed,
 			characters: parentlanguage
 		});
 	},
@@ -516,7 +518,7 @@ var LanguageScript = LanguageScript || (function () {
 			sendChat("Languages Script", '/w gm Language "' + description + '" was not found and could not be deleted');
 		}else{
 			roll20API.languageData = tempArray;
-			sendChat("Languages Script", '/w gm Language "' + description + '" deleted');
+			sendChat("Languages Script", '/w gm Language "' + description + '" is deleted');
 		}
 	},
 
