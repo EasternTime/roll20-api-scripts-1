@@ -359,10 +359,8 @@ var LanguageScript = LanguageScript || (function () {
 	
 	gibberishFunction = function(language,sentence) {
 		//Polyfill - implementation of arr.findIndex method
-		var directChangeFromArray = numbers["Common"].concat(symbols["Common"]);
+		var directChangeFromArray = numbers["Common_old"].concat(symbols["Common_old"]);
 		var directChangeToArray = numbers[language].concat(symbols[language]);
-		var allLetters = consonant[language].concat([language]);
-		var allLettersUpper = consonantUpper[language].concat(vowelUpper[language]);
 		var result = '';
 		var temp = 0;
 		var i = 0;
@@ -398,6 +396,8 @@ var LanguageScript = LanguageScript || (function () {
 				}
 				//if we met no vowels at all
 				else {
+					var allLetters = consonant[language].concat(vowel[language]);
+					var allLettersUpper = consonantUpper[language].concat(vowelUpper[language]);
 					if (sentence[i].toLowerCase() !== sentence[i]) {
 						result += allLettersUpper[customRandom(languageSeed,sentence.charCodeAt(i)) % allLettersUpper.length];
 					}
