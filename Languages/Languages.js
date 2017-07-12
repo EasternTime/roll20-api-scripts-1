@@ -298,7 +298,6 @@ var LanguageScript = LanguageScript || (function () {
 			sendChat("Languages Script", "/w " + msg.who + " You didn't say anything.");
 			return;
 		}
-		var gibberish = gibberishFunction(characters,sentence);
 		var allPlayers = findObjs({_type: "player"}, {caseInsensitive: true});
 		var speakingas = "";
 		var languages = "";
@@ -315,6 +314,7 @@ var LanguageScript = LanguageScript || (function () {
 						//If character knows any languages...
 						if(languages !== undefined){
 							languages.split(separators).some(function(lang) {
+								//And speaks the one we need...
 								if(lang.toUpperCase() == whichLanguage.toUpperCase()){
 									//Add character to list of chars who can understand language.
 									spokenByIds.push(p.get("id"));
@@ -329,13 +329,16 @@ var LanguageScript = LanguageScript || (function () {
 				}
 			}
 		});
+		//Test if speaker can speak that language (or if he is a GM)
 		var isSpeakerFluent = true;
 		if (spokenByIds.indexOf(msg.playerid) === -1 && !playerIsGM(msg.playerid)) {
 			isSpeakerFluent = false;
 			sendChat(msg.who, "/w " + msg.who + " You pretend to speak " + whichLanguage + ".");
 		}
-		sendChat(msg.who, gibberish);
+		//Sends gibberish to chat
+		sendChat(msg.who, gibberishFunction(characters,sentence));
 		if (isSpeakerFluent) {
+			//whispers meaning of gibberish to ones who can understand language
 			sendChat("Languages Script", "/w gm " + msg.who + " said '" + sentence + "' in " + whichLanguage);
 			_.each(allPlayers,function(p) {
 				if (spokenByIds.indexOf(p.get("id")) > -1) {
@@ -344,6 +347,7 @@ var LanguageScript = LanguageScript || (function () {
 			});
 		}
 		else {
+			//ones who can understand language gets that speaker is pretending
 			sendChat("Languages Script", "/w gm " + msg.who + " **pretended** to say '" + sentence + "' in " + whichLanguage);
 			_.each(allPlayers,function(p) {
 				if (spokenByIds.indexOf(p.get("id")) > -1) {
