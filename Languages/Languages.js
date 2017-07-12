@@ -19,7 +19,7 @@ Change this if your character sheets dont use this attribute
 var LanguageScript = LanguageScript || (function () {
 	'use strict';
 	
-	var version = "1.3.0",
+	var version = "1.4.0",
 	releasedate = "01/06/2017",  
 	languageTag = "languages",
 	whichLanguage = "Common",
@@ -34,13 +34,8 @@ var LanguageScript = LanguageScript || (function () {
 	
 	roll20API = roll20API || {},
 	
-	whoSpoke = "",
-	whoSpoke2 = "",
-	gibberish = "",
-	spokenByIds = "",
 	characters = "",
 	
-	rndSeed,
 	languageSeed = 0,
 	separators = /[()\-\s,]+/,
 	
@@ -293,113 +288,66 @@ var LanguageScript = LanguageScript || (function () {
 	
 	//Checks if character who player speaks as can speak language
 	checkForFluency = function(msg) {
-		//All players
-		var allPlayers = findObjs({_type: "player"}, {caseInsensitive: true});
 		//Check if it is character of GM speaks. If no, throw error
-		if(findObjs({ _type: "character", name: msg.who }).length !== 0 || playerIsGM(msg.playerid)){
-			spokenByIds = "";
-			//For each player...
-			_.each(allPlayers, function(p) {
-				//if player is online...
-				if(p.get("_online")){
-					var speakingas = p.get("speakingas");
-					//If player speaks as character...
-					if(speakingas !== undefined){
-						var languages = getAttrByName(speakingas.split("|")[1], languageTag);
-						//If character knows any languages...
-						if(languages !== undefined){
-							languages.split(separators).forEach(function(lang) {
-								if(lang.toUpperCase() == whichLanguage.toUpperCase()){
-									//Add character to list of chars who can understand language.
-									spokenByIds += "," + p.get("id");
-								}
-							});
-						}else if(findObjs({ _type: "character", _id: speakingas }).length !== 0){
-							sendChat("Languages Script", "This script is not set up properly for your character sheets. Use this command to fix: !setlanguagetag [character sheet language attribute name]");
-							log("This script is not set up for your character sheets. Use this command to fix: !setlanguagetag [character sheet language attribute name]");   
-							return;
-						}else if(playerIsGM(p.get("id"))){
-							log("The previous error was handled properly and there is nothing to worry about");
-						}
-					}
-				}
-			});
-		}else{
+		if(findObjs({ _type: "character", name: msg.who }).length === 0 && !playerIsGM(msg.playerid)){
 			sendChat("Languages Script", "/w " + msg.who + " Only characters or GMs may speak character languages");
 			return;
 		}
-		roll20API.fluencyArray = [];
-		_.each(allPlayers, function(indexPlayers) {
-			if(indexPlayers.get("_online")){
-				var isSpeaking = 0;
-				if(indexPlayers.get("_id") == msg.playerid){
-					isSpeaking = 1;
-					whoSpoke = indexPlayers.get("_displayname");
+		var sentence = msg.content.substr(2);
+		if(sentence.length === 0) {
+			sendChat("Languages Script", "/w " + msg.who + " You didn't say anything.");
+			return;
+		}
+		var gibberish = gibberishFunction(characters,sentence);
+		var allPlayers = findObjs({_type: "player"}, {caseInsensitive: true});
+		var speakingas = "";
+		var languages = "";
+		var spokenByIds = [];
+		//For each player...
+		_.each(allPlayers, function(p) {
+			//if player is online...
+			if(p.get("_online")){
+				speakingas = p.get("speakingas");
+				//If player speaks as character...
+				if(speakingas !== undefined){
+					var languages = getAttrByName(speakingas.split("|")[1], languageTag);
+					//If character knows any languages...
+					if(languages !== undefined){
+						languages.split(separators).some(function(lang) {
+							if(lang.toUpperCase() == whichLanguage.toUpperCase()){
+								//Add character to list of chars who can understand language.
+								spokenByIds.push(p.get("id"));
+								return true;
+							}
+							else {
+								return false;
+							}
+						});
+					}
 				}
-				var displayNameShort = indexPlayers.get("_displayname").substr(0,indexPlayers.get("_displayname").indexOf(' '));
-				var displayNameFull = indexPlayers.get("_displayname");
-				var playerID = indexPlayers.get("_id");
-				var asWho = msg.who;
-				var speaks = -1;
-				if(spokenByIds.indexOf(indexPlayers.get("_id"))>-1){
-					speaks = 1;
-				}else if(playerIsGM((indexPlayers.get("_id")))){
-					speaks = 1;
-				}else{
-					speaks = -1;   
-				}
-				roll20API.fluencyArray.push({
-					isSpeaking: isSpeaking,
-					displayNameShort: displayNameShort,
-					displayNameFull: displayNameFull,
-					playerID: playerID,
-					asWho: asWho,
-					speaks: speaks
-				});
 			}
 		});
-		prepareSend(msg);
-	},
-	
-	prepareSend = function(msg) {
-		var sentence = msg.content.substr(1);
-	
-		if(sentence.length === 0) {
-			sendChat("Languages Script", "/w " + whoSpoke + " You didn't say anything.");
-			return;
+		var isSpeakerFluent = true;
+		if (spokenByIds.indexOf(msg.playerid) === -1) {
+			isSpeakerFluent = false;
+			sendChat(msg.who, "/w " + msg.who + " You pretend to speak " + whichLanguage + ".");
 		}
-	
-		gibberish = gibberishFunction(characters,sentence);
-		
-		var theSpeaker = _.findWhere(roll20API.fluencyArray, {isSpeaking: 1});
-		if(theSpeaker.speaks == -1){
-			sendChat(msg.who + " Pretending to speak " + whichLanguage, gibberish);
-			return;
-		}
-		
-		if(whoSpoke.indexOf(" ")>-1){
-			whoSpoke = whoSpoke.substring(0,whoSpoke.indexOf(" "));
-		}
-		
-		sendChat(msg.who, "/w " + whoSpoke + " '" + sentence +" ' in " + whichLanguage + ".");
-		sendChat("Languages Script", "/w gm " + msg.who + " said '" + sentence + " ' in " + whichLanguage);
-		//Debugging (logging)
-		sendChat("Languages Script", "/w gm " + msg.who + " gibberish version: '" + gibberish + " ' is in " + whichLanguage);
-		
-		_.each(roll20API.fluencyArray, function(indexPlayers) {
-			if(indexPlayers.displayNameFull != whoSpoke && indexPlayers.displayNameShort != whoSpoke){
-				if(indexPlayers.displayNameFull.indexOf(" ")>-1){
-					whoSpoke2 = indexPlayers.displayNameFull.substring(0,indexPlayers.displayNameFull.indexOf(" "));
-				}else{
-					whoSpoke2 = indexPlayers.displayNameFull;
+		sendChat(msg.who, "' " + gibberish +" '");
+		if (isSpeakerFluent) {
+			_.each(allPlayers,function(p) {
+				if (spokenByIds.indexOf(p.get("id")) > -1) {
+					sendChat(msg.who, "/w " + p.get("_displayname") + " ' " + sentence +" ' in " + whichLanguage + ".");
 				}
-				if(indexPlayers.speaks != -1){
-					sendChat(msg.who, "/w " + whoSpoke2 + " '" + sentence +" ' in " + whichLanguage + ".");
-				}else{
-					sendChat(msg.who, "/w " + whoSpoke2 + " " + gibberish);
-				}  
-			}
-		});  
+			});
+		}
+		else {
+			_.each(allPlayers,function(p) {
+				if (spokenByIds.indexOf(p.get("id")) > -1) {
+					sendChat(msg.who, "/w " + p.get("_displayname") + " " + msg.who + " pretends to speak in " + whichLanguage + ".");
+				}
+			});
+		}
+		sendChat("Languages Script", "/w gm " + msg.who + " said ' " + sentence + " ' in " + whichLanguage);
 	},
 	
 	gibberishFunction = function(language,sentence) {
