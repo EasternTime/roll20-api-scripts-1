@@ -19,7 +19,7 @@ Change this if your character sheets dont use this attribute
 var LanguageScript = LanguageScript || (function () {
 	'use strict';
 	
-	var version = "1.4.1",
+	var version = "1.4.2",
 	releasedate = "13/07/2017",  
 	languageTag = "languages",
 	whichLanguage = "Common",
@@ -334,15 +334,15 @@ var LanguageScript = LanguageScript || (function () {
 		}
 		sendChat(msg.who, gibberish);
 		if (isSpeakerFluent) {
-			sendChat("Languages Script", "/w gm " + msg.who + " said ' " + sentence + " ' in " + whichLanguage);
+			sendChat("Languages Script", "/w gm " + msg.who + " said '" + sentence + "' in " + whichLanguage);
 			_.each(allPlayers,function(p) {
 				if (spokenByIds.indexOf(p.get("id")) > -1) {
-					sendChat(msg.who, "/w " + p.get("_displayname") + " ' " + sentence +" ' in " + whichLanguage + ".");
+					sendChat(msg.who, "/w " + p.get("_displayname") + " '" + sentence +"' in " + whichLanguage + ".");
 				}
 			});
 		}
 		else {
-			sendChat("Languages Script", "/w gm " + msg.who + " **pretended** to say ' " + sentence + " ' in " + whichLanguage);
+			sendChat("Languages Script", "/w gm " + msg.who + " **pretended** to say '" + sentence + "' in " + whichLanguage);
 			_.each(allPlayers,function(p) {
 				if (spokenByIds.indexOf(p.get("id")) > -1) {
 					sendChat(msg.who, "/w " + p.get("_displayname") + " " + msg.who + " pretends to speak in " + whichLanguage + ".");
@@ -478,18 +478,9 @@ var LanguageScript = LanguageScript || (function () {
 			return (description.toLowerCase() !== language.Description.toLowerCase());
 		});
 		if(arraysEqual(tempArray,roll20API.languageData)){
-			if(parentlanguage.toLowerCase() == "dwarven"){
-				parentlanguage = "Dwarven";
-			}else if(parentlanguage.toLowerCase() == "common"){
-				parentlanguage = "Common";
-			}else if(parentlanguage.toLowerCase() == "elven"){
-				parentlanguage = "Elven";
-			}else if(parentlanguage.toLowerCase() == "infernal"){
-				parentlanguage = "Infernal";
-			}else if(parentlanguage.toLowerCase() == "draconic"){
-				parentlanguage = "Draconic";
-			}else if(parentlanguage.toLowerCase() == "cyrillic"){
-				parentlanguage = "Cyrillic";
+			if (alphabets.indexOf(parentlanguage.toLowerCase()) > -1) {
+				//first letter to upper case, other to lower
+				parentlanguage = parentlanguage[0].toUpperCase() + parentlanguage.substring(1);
 			}else{
 				//language error
 				sendChat("Languages Script", '/w gm Parent langauge: "' + parentlanguage + '" is not valid. Choices are : Dwarven, Elven, Common, Draconic, Infernal');
