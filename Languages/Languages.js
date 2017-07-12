@@ -480,7 +480,7 @@ var LanguageScript = LanguageScript || (function () {
 		if(arraysEqual(tempArray,roll20API.languageData)){
 			if (alphabets.indexOf(parentlanguage.toLowerCase()) > -1) {
 				//first letter to upper case, other to lower
-				parentlanguage = parentlanguage[0].toUpperCase() + parentlanguage.substring(1);
+				parentlanguage = parentlanguage[0].toUpperCase() + parentlanguage.substring(1).toLowerCase();
 			}else{
 				//language error
 				sendChat("Languages Script", '/w gm Parent langauge: "' + parentlanguage + '" is not valid. Choices are : Dwarven, Elven, Common, Draconic, Infernal');
